@@ -1,0 +1,6 @@
+const timeout = time => new Promise(resolve => setTimeout(resolve, time))
+const timeFun = (str) => timeout(10).then(() => str)
+timeFun('hello')
+.then(res => res + ' lagou')
+.then(res => res + ' I ❤ U')
+.then(res => console.log(res))

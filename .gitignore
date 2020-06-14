@@ -1,0 +1,8 @@
+node_modules
+.history
+*.log
+package-lock.json
+.vscode
+.cache
+dist
+test
