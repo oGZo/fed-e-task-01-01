@@ -62,10 +62,15 @@ class MyPromise {
     // 立即执行传入参数
     // 参数直接写为 this.resolve  会导致函数内 this指向会发生改变
     // 异步执行状态变更
-    exector(
-      (value) => asyncExecFun(() => this.resolve(value)),
-      (reason) => asyncExecFun(() => this.reject(reason))
-    );
+    // 捕获执行器的异常
+    try {
+        exector(
+          (value) => asyncExecFun(() => this.resolve(value)),
+          (reason) => asyncExecFun(() => this.reject(reason))
+        );
+    } catch (e) {
+        this.reject(e)
+    }
   }
 
   resolve(value) {
@@ -82,6 +87,9 @@ class MyPromise {
     if (this.status !== PENDING) return;
     this.reason = reason;
     this.status = REJECTED;
+    if(!this.failCallbacks.length){
+        throw '(in MyPromise)'
+    }
     // 执行所有失败回调
     while (this.failCallbacks.length) this.failCallbacks.shift()();
   }
